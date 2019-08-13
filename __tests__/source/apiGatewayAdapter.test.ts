@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { apiGatewayAdapter } from "../../app/source/apiGatewayAdapter";
+import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
 
 describe("API Gateway Adaptor", () => {
 
