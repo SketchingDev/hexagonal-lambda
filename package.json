@@ -1,0 +1,36 @@
+{
+  "name": "hexagonal-architecture",
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT",
+  "version": "1.0.0",
+  "description": "An example of writing a Lambda using an hexagonal (ports and adaptors) architecture",
+  "main": "handler.js",
+  "scripts": {
+    "test": "jest __tests__"
+  },
+  "dependencies": {
+    "@laconia/adapter": "^1.3.0",
+    "@laconia/core": "^1.3.0",
+    "@laconia/event": "^1.3.0",
+    "aws-sdk": "^2.505.0",
+    "serverless": "^1.49.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.30",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/jest": "^24.0.16",
+    "@types/lambda-tester": "^3.5.1",
+    "@types/node": "^10.12.18",
+    "axios": "^0.19.0",
+    "jest": "^24.8.0",
+    "lambda-tester": "^3.6.0",
+    "prettier": "^1.18.2",
+    "serverless-offline": "^5.9.0",
+    "serverless-webpack": "^5.3.1",
+    "source-map-support": "^0.5.6",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^4.5.0",
+    "typescript": "^2.5.0",
+    "webpack": "^4.39.1"
+  }
+}

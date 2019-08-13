@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2018"
+    ],
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "target": "es2018",
+    "outDir": "lib"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "typeRoots": ["node_modules/@types"]
+}

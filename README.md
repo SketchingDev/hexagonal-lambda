@@ -1,1 +1,1 @@
-# AWS Lambda using Hexagonal (Ports and Adaptors) Architecture
+# AWS Lambda using Hexagonal Architecture

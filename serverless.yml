@@ -1,0 +1,39 @@
+service:
+  name: hexagonal-lambda
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs8.10
+
+custom:
+  serverless-offline:
+    port: 8080
+
+functions:
+  closeAccountHttp:
+    handler: handler.http
+    events:
+      - http:
+          method: DELETE
+          path: account/{id}
+          request:
+            parameters:
+              paths:
+                id: true
+  closeAccountS3:
+    handler: handler.s3
+    events:
+      - s3: final-statement-bucket
+        event: s3:*
+
+resources:
+  Resources:
+    FinalStatementBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: final-statement-bucket
