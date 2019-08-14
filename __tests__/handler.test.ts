@@ -5,9 +5,6 @@ import { AccountManagerClient } from "../app/client/AccountManagerClient";
 import { closeAccountOverApiGateway, closeAccountOverS3 } from "../handler";
 import { AppDependencies } from "../app/domain/AppDependencies";
 
-// tslint:disable-next-line:no-var-requires
-require("lambda-tester").noVersionCheck();
-
 describe("Close Accounts", () => {
 
   let accountWithNoMeters: AccountManagerClient;
