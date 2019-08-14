@@ -7,8 +7,10 @@ import { AppDependencies } from "../app/domain/AppDependencies";
 
 describe("Close Accounts", () => {
   const mockLogger = {
-    log: () => {},
-    error: () => {}
+    log: () => {
+    },
+    error: () => {
+    },
   };
 
   let accountWithNoMeters: AccountManagerClient;
@@ -25,7 +27,7 @@ describe("Close Accounts", () => {
     const handler: APIGatewayProxyHandler = laconia(closeAccountOverApiGateway)
       .register((): AppDependencies => ({
         accountManager: accountWithNoMeters,
-        logger: mockLogger
+        logger: mockLogger,
       }));
 
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
@@ -52,7 +54,7 @@ describe("Close Accounts", () => {
       .register(() => ({
         accountManager: accountWithNoMeters,
         s3: createMockS3Client(JSON.stringify({ id: "test-id-2" })),
-        logger: mockLogger
+        logger: mockLogger,
       }));
 
     const s3PutEvent = createS3Event("test-bucket-name", "test-object-key");
@@ -66,25 +68,27 @@ describe("Close Accounts", () => {
   });
 
   const createS3Event = (bucketName: string, objectKey: string): S3Event =>
-    ({ Records: [{
-      awsRegion: "",
-      eventName: "",
-      eventSource: "",
-      eventTime: "",
-      eventVersion: "",
-      requestParameters: { sourceIPAddress: "" },
-      responseElements: {
-        "x-amz-request-id": "",
-        "x-amz-id-2": "",
-      },
-      s3: {
-        bucket: { arn: "", name: bucketName, ownerIdentity: { principalId: "" } },
-        configurationId: "",
-        object: { eTag: "", key: objectKey, sequencer: "", size: 0, versionId: "" },
-        s3SchemaVersion: "",
-      },
-      userIdentity: { principalId: "" },
-    }]});
+    ({
+      Records: [{
+        awsRegion: "",
+        eventName: "",
+        eventSource: "",
+        eventTime: "",
+        eventVersion: "",
+        requestParameters: { sourceIPAddress: "" },
+        responseElements: {
+          "x-amz-request-id": "",
+          "x-amz-id-2": "",
+        },
+        s3: {
+          bucket: { arn: "", name: bucketName, ownerIdentity: { principalId: "" } },
+          configurationId: "",
+          object: { eTag: "", key: objectKey, sequencer: "", size: 0, versionId: "" },
+          s3SchemaVersion: "",
+        },
+        userIdentity: { principalId: "" },
+      }],
+    });
 
   const createMockS3Client = (objectBody: string) => ({
     getObject: jest.fn().mockReturnValue({ promise: jest.fn().mockResolvedValue({ Body: objectBody }) }),

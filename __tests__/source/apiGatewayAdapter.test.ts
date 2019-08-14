@@ -3,7 +3,8 @@ import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
 
 describe("API Gateway Adaptor", () => {
   const mockLogger = {
-    error: () => {}
+    error: () => {
+    },
   };
 
   const mockDependencies = { logger: mockLogger };

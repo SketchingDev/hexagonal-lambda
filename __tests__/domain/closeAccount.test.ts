@@ -3,6 +3,12 @@ import { AccountManagerClient } from "../../app/client/AccountManagerClient";
 import { closeAccount } from "../../app/domain/closeAccount";
 
 describe("Close Account", () => {
+  const mockLogger = {
+    error: () => {
+    },
+    log: () => {
+    },
+  };
 
   let elecMeter: Meter;
   let gasMeter: Meter;
@@ -33,7 +39,7 @@ describe("Close Account", () => {
     const accountWithNoMeters = createAccountClient([]);
     const testAccountId = "test-account-id-1";
 
-    await closeAccount(testAccountId, { accountManager: accountWithNoMeters });
+    await closeAccount(testAccountId, { accountManager: accountWithNoMeters, logger: mockLogger });
 
     expect(accountWithNoMeters.getActiveMeters).toHaveBeenCalledWith(testAccountId);
     expect(accountWithNoMeters.removeMeter).not.toHaveBeenCalled();
@@ -44,7 +50,7 @@ describe("Close Account", () => {
     const singleFuelAccount = createAccountClient([elecMeter]);
     const testAccountId = "test-account-id-2";
 
-    await closeAccount(testAccountId, { accountManager: singleFuelAccount });
+    await closeAccount(testAccountId, { accountManager: singleFuelAccount, logger: mockLogger });
 
     expect(singleFuelAccount.getActiveMeters).toHaveBeenCalledWith(testAccountId);
     expect(singleFuelAccount.removeMeter).toHaveBeenCalledWith(testAccountId, elecMeter);
@@ -55,7 +61,7 @@ describe("Close Account", () => {
     const dualFuelAccount = createAccountClient([elecMeter, gasMeter]);
     const testAccountId = "test-account-id-3";
 
-    await closeAccount(testAccountId, { accountManager: dualFuelAccount });
+    await closeAccount(testAccountId, { accountManager: dualFuelAccount, logger: mockLogger });
 
     expect(dualFuelAccount.getActiveMeters).toHaveBeenCalledWith(testAccountId);
     expect(dualFuelAccount.removeMeter).toHaveBeenCalledWith(testAccountId, elecMeter);
@@ -70,7 +76,7 @@ describe("Close Account", () => {
       closeAccount: jest.fn().mockResolvedValue(undefined),
     };
 
-    await expect(closeAccount("test-account-id", { accountManager: accountManagerClient }))
+    await expect(closeAccount("test-account-id", { accountManager: accountManagerClient, logger: mockLogger }))
       .rejects
       .toThrowError("Failed to remove meters for account test-account-id");
   });
