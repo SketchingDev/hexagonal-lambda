@@ -2,6 +2,9 @@ import { S3Event } from "aws-lambda";
 import { s3Adaptor } from "../../app/sources/s3Adaptor";
 
 describe("S3 Adaptor", () => {
+  const mockLogger = {
+    log: () => {},
+  };
 
   test("Account ID from event passed to next function", async () => {
     const testId = "test-id";
@@ -9,7 +12,7 @@ describe("S3 Adaptor", () => {
     const bucketName = "test-bucket-name";
 
     const mockS3Client = createMockS3Client(JSON.stringify({id: testId}));
-    const dependencies = { s3: mockS3Client};
+    const dependencies = { s3: mockS3Client, logger: mockLogger};
 
     const s3DeleteEvent: S3Event = createS3Event(bucketName, objectKey);
 

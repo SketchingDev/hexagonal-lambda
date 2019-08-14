@@ -8,6 +8,7 @@ import { s3Adaptor } from "./app/sources/s3Adaptor";
 
 const productionDependencies = (): AppDependencies => ({
   accountManager: new StubAmazingEnergyClient(),
+  logger: console
 });
 
 export const closeAccountOverApiGateway = apiGatewayAdapter(closeAccount);

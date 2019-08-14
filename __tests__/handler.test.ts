@@ -6,6 +6,10 @@ import { closeAccountOverApiGateway, closeAccountOverS3 } from "../handler";
 import { AppDependencies } from "../app/domain/AppDependencies";
 
 describe("Close Accounts", () => {
+  const mockLogger = {
+    log: () => {},
+    error: () => {}
+  };
 
   let accountWithNoMeters: AccountManagerClient;
 
@@ -21,6 +25,7 @@ describe("Close Accounts", () => {
     const handler: APIGatewayProxyHandler = laconia(closeAccountOverApiGateway)
       .register((): AppDependencies => ({
         accountManager: accountWithNoMeters,
+        logger: mockLogger
       }));
 
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
@@ -46,7 +51,8 @@ describe("Close Accounts", () => {
     const handler: S3Handler = laconia(closeAccountOverS3)
       .register(() => ({
         accountManager: accountWithNoMeters,
-        s3: createMockS3Client(JSON.stringify({ id: "test-id-2" }))
+        s3: createMockS3Client(JSON.stringify({ id: "test-id-2" })),
+        logger: mockLogger
       }));
 
     const s3PutEvent = createS3Event("test-bucket-name", "test-object-key");
