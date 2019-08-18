@@ -5,8 +5,10 @@ import { closeAccount } from "./app/domain/closeAccount";
 import { apiGatewayAdapter } from "./app/sources/apiGatewayAdapter";
 import { StubAmazingEnergyClient } from "./app/client/StubAmazingEnergyClient";
 import { s3Adaptor } from "./app/sources/s3Adaptor";
+import { StubInstrumentation } from "./app/instrumentation/StubInstrumentation";
 
 const productionDependencies = (): AppDependencies => ({
+  instrumentation: new StubInstrumentation(),
   accountManager: new StubAmazingEnergyClient(),
   logger: console
 });

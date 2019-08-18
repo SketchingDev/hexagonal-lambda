@@ -4,13 +4,19 @@ import lambdaTester = require("lambda-tester");
 import { AccountManagerClient } from "../app/client/AccountManagerClient";
 import { closeAccountOverApiGateway, closeAccountOverS3 } from "../handler";
 import { AppDependencies } from "../app/domain/AppDependencies";
+import { Instrumentation } from "../app/instrumentation/Instrumentation";
 
 describe("Close Accounts", () => {
-  const mockLogger = {
+  const logger = {
     log: () => {
     },
     error: () => {
     },
+  };
+
+  const instrumentation: Instrumentation = {
+    closedAccount: () => Promise.resolve(),
+    removedMeters: () => Promise.resolve()
   };
 
   let accountWithNoMeters: AccountManagerClient;
@@ -27,7 +33,8 @@ describe("Close Accounts", () => {
     const handler: APIGatewayProxyHandler = laconia(closeAccountOverApiGateway)
       .register((): AppDependencies => ({
         accountManager: accountWithNoMeters,
-        logger: mockLogger,
+        logger,
+        instrumentation
       }));
 
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
@@ -54,7 +61,8 @@ describe("Close Accounts", () => {
       .register(() => ({
         accountManager: accountWithNoMeters,
         s3: createMockS3Client(JSON.stringify({ id: "test-id-2" })),
-        logger: mockLogger,
+        logger,
+        instrumentation
       }));
 
     const s3PutEvent = createS3Event("test-bucket-name", "test-object-key");
