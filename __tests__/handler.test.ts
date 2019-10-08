@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, S3Event, S3Handler } from "aws-lambda";
 import laconia = require("@laconia/core");
 import lambdaTester = require("lambda-tester");
-import { AccountManagerClient } from "../app/client/AccountManagerClient";
+import { AccountManagerClient } from "../app/accountClients/AccountManagerClient";
 import { closeAccountOverApiGateway, closeAccountOverS3 } from "../handler";
 import { AppDependencies } from "../app/domain/AppDependencies";
 import { Instrumentation } from "../app/instrumentation/Instrumentation";

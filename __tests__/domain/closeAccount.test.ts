@@ -1,5 +1,5 @@
 import { FuelType, Meter, Unit } from "../../app/domain/models/Meter";
-import { AccountManagerClient } from "../../app/client/AccountManagerClient";
+import { AccountManagerClient } from "../../app/accountClients/AccountManagerClient";
 import { closeAccount } from "../../app/domain/closeAccount";
 import { Instrumentation } from "../../app/instrumentation/Instrumentation";
 

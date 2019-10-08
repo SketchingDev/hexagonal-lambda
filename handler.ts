@@ -3,7 +3,7 @@ import { APIGatewayProxyHandler, S3Handler } from "aws-lambda";
 import { AppDependencies } from "./app/domain/AppDependencies";
 import { closeAccount } from "./app/domain/closeAccount";
 import { apiGatewayAdapter } from "./app/sources/apiGatewayAdapter";
-import { StubAmazingEnergyClient } from "./app/client/StubAmazingEnergyClient";
+import { StubAmazingEnergyClient } from "./app/accountClients/StubAmazingEnergyClient";
 import { s3Adaptor } from "./app/sources/s3Adaptor";
 import { StubInstrumentation } from "./app/instrumentation/StubInstrumentation";
 

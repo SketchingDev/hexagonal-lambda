@@ -1,4 +1,4 @@
-import { AccountManagerClient } from "../client/AccountManagerClient";
+import { AccountManagerClient } from "../accountClients/AccountManagerClient";
 import { Instrumentation } from "../instrumentation/Instrumentation";
 
 export interface AppDependencies {
