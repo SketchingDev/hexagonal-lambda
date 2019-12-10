@@ -565,25 +565,28 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
-"@laconia/adapter@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@laconia/adapter/-/adapter-1.3.0.tgz#88ea785a5f5128abf304e342c0f76f5b9345eed7"
-  integrity sha512-rSMqrnoaU011732paiiZn/nsQm7U0eLXOEOQvP1vubdWwXy7EzdLMMItqlIu3HK3onCMebQJ2S/qgR/ce7hD2w==
+"@laconia/adapter@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@laconia/adapter/-/adapter-1.7.0.tgz#027520428782f0646d6f44650a08cd3235e9d331"
+  integrity sha512-95A7njsuyu/JlYOFkKD8AkukmU9RvKtj9Bj9l45EQuz/cyJ/2afq/RPSsPJQuPDZAjIUXNkqdbYohepAxyD4ZQ==
   dependencies:
-    "@laconia/core" "^1.3.0"
-    "@laconia/event" "^1.3.0"
+    "@laconia/core" "^1.7.0"
+    "@laconia/event" "^1.7.0"
 
-"@laconia/core@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@laconia/core/-/core-1.3.0.tgz#06db93754c59523f49fa2ffca5c4cfe8cc341ecb"
-  integrity sha512-qwJftr+ym9k1Q+o1/v7mY4RhI4DDTKKME95zOpgMqH++kN1zKvf4GZvf8Ukynq3fRS3dnZ+Yhefarjj1T9kJXg==
-
-"@laconia/event@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@laconia/event/-/event-1.3.0.tgz#3fe230e6bccaf660aa063e690e9557b27d784af0"
-  integrity sha512-YSG+qE7z0qW6ot6pIlbnf3l1sC2uTY+w1UuRiTrr3yWP6vULesaqScEK7bOYRBmACkHPYxqFCaLL+Krz3/LZeQ==
+"@laconia/core@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@laconia/core/-/core-1.7.0.tgz#e1208117bfb2f9fb7bce698bf9281be3ecb2d34f"
+  integrity sha512-mufoUxiEwej+SKVlcgWtOPervHVrmmVREcHTgsg2GC21dCTgJqKgtVBppD3CA/D7fNWvGa5UoCQe6KMYJxgkJQ==
   dependencies:
-    "@laconia/core" "^1.3.0"
+    "@types/aws-lambda" "8.10.33"
+
+"@laconia/event@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@laconia/event/-/event-1.7.0.tgz#cec456ebb4ace3bc17dc90ddc55b0f676e9edc9e"
+  integrity sha512-dBZ8Dwm9/i7ucgGcJAwbtP4x8MF1TiZQp00onmh87MGi7PmVKJtmfDlbKzD95GhePyqcxuJUUSAdvNUcdTh/Nw==
+  dependencies:
+    "@laconia/core" "^1.7.0"
+    "@types/aws-lambda" "~8.10.31"
 
 "@serverless/cli@^1.0.1":
   version "1.0.3"
@@ -700,6 +703,11 @@
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.31.tgz#f34c42412e59824efa21717c71024f7d04405b51"
   integrity sha512-xcmOvzVILQoex1oR+vjKnBP3OJn+g92r3yVzeTSmRgLQwBvSOghRPRSx3rVMQivLzAIR6atxlVu3AV9bxc/hQw==
 
+"@types/aws-lambda@8.10.33", "@types/aws-lambda@~8.10.31":
+  version "8.10.33"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.33.tgz#64ad8f2e785e5c2cf86dc2d596c9a0b2e2e14ab5"
+  integrity sha512-BZ8lPY/vyUq+Bid/BgYrKbUF36SZYuGOAMgOq/VgqnTQnCn9GBo3HejKZ6xrUzA8zLf9Pjs707amkt4f7rWujw==
+
 "@types/aws-sdk@^2.7.0":
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/@types/aws-sdk/-/aws-sdk-2.7.0.tgz#83588b3d14ebdca1d4ce5e023387577568ce82f3"
@@ -772,7 +780,7 @@
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/lambda-tester@^3.5.1":
+"@types/lambda-tester@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@types/lambda-tester/-/lambda-tester-3.6.0.tgz#7516e89c5d9b31dbadbb1113903546c84b7be666"
   integrity sha512-gWzruHlQKeOoIyvV9CY71zV0btifW2I1sxGXHuDS+Py9jQJG3j6beYrNUzEU5DsU/JDhzV3Cw2q7UHaMYfhbqA==

@@ -1,19 +1,19 @@
 import { S3Event } from "aws-lambda";
+import { AppDependencies } from "../domain/AppDependencies";
+import { CloseAccount } from "../domain/closeAccount";
 
 const { s3 } = require("@laconia/event");
 
-interface CloseAccountEvent {
+interface ObjectContent {
   id: string;
 }
 
-export const s3Adaptor = (next: any) => async (event: S3Event, dependencies: { [key: string]: any; }) => {
-  const {logger} = dependencies;
-
+export const s3Adaptor = (next: CloseAccount) => async (event: S3Event, dependencies: AppDependencies) => {
+  const { logger, s3Client } = dependencies;
   logger.log(event);
 
-  const s3Event = s3(event, dependencies.s3);
-
-  const closeAccountEvent: CloseAccountEvent = await s3Event.getJson();
+  const s3Event = s3(event, s3Client);
+  const closeAccountEvent: ObjectContent = await s3Event.getJson();
 
   const hasId = "id" in closeAccountEvent;
   if (!hasId) {

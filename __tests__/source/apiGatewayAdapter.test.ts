@@ -1,13 +1,15 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
+import { AppDependencies } from "../../app/domain/AppDependencies";
 
 describe("API Gateway Adaptor", () => {
-  const mockLogger = {
-    error: () => {
+
+  const dependencies: Pick<AppDependencies, 'logger'> = {
+    logger: {
+      log: () => undefined,
+      error: () => undefined,
     },
   };
-
-  const mockDependencies = { logger: mockLogger };
 
   test("Next function invoked with Account ID from proxy event", async () => {
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
@@ -19,9 +21,9 @@ describe("API Gateway Adaptor", () => {
     const nextFunction = jest.fn();
 
     const adaptor = apiGatewayAdapter(nextFunction);
-    await adaptor(deleteEvent as any, mockDependencies);
+    await adaptor(deleteEvent as any, dependencies as any);
 
-    expect(nextFunction).toBeCalledWith("test-account-id", mockDependencies);
+    expect(nextFunction).toBeCalledWith("test-account-id", dependencies);
   });
 
   test("Result of next function returned as request body", async () => {
@@ -35,7 +37,7 @@ describe("API Gateway Adaptor", () => {
     const nextFunction = jest.fn().mockResolvedValue(nextFunctionResponse);
 
     const adaptor = apiGatewayAdapter(nextFunction);
-    const response = await adaptor(deleteEvent as any, mockDependencies);
+    const response = await adaptor(deleteEvent as any, dependencies as any);
 
     expect(response).toMatchObject({
       body: nextFunctionResponse,
@@ -55,7 +57,7 @@ describe("API Gateway Adaptor", () => {
     const nextFunction = jest.fn().mockRejectedValue(undefined);
 
     const adaptor = apiGatewayAdapter(nextFunction);
-    const response = await adaptor(deleteEvent as any, mockDependencies);
+    const response = await adaptor(deleteEvent as any, dependencies as any);
 
     expect(response).toMatchObject({
       body: "Unknown error",
@@ -73,7 +75,7 @@ describe("API Gateway Adaptor", () => {
     const nextFunction = jest.fn().mockRejectedValue(undefined);
 
     const adaptor = apiGatewayAdapter(nextFunction);
-    const response = await adaptor(deleteEvent as any, mockDependencies);
+    const response = await adaptor(deleteEvent as any, dependencies as any);
 
     expect(response).toMatchObject({
       body: "Account not defined",

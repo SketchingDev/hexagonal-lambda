@@ -1,10 +1,15 @@
 import { AppDependencies } from "./AppDependencies";
 
-export type CloseAccount = (accountId: string, appDependencies: AppDependencies) => Promise<void>;
+export type CloseAccount =
+  (accountId: string, appDependencies: Pick<AppDependencies, "accountManager" | "instrumentation">) => Promise<void>;
 
+// This is a port for providing the ID of an account to close
 export const closeAccount: CloseAccount = async (
   accountId: string,
-  { accountManager, instrumentation }: AppDependencies
+  {
+    accountManager, // This is a port for managing customer accounts
+    instrumentation, // This is a port for instrumentation
+  },
 ): Promise<void> => {
   const activeMeters = await accountManager.getActiveMeters(accountId);
 

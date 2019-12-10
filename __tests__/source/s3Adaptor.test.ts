@@ -1,10 +1,13 @@
 import { S3Event } from "aws-lambda";
 import { s3Adaptor } from "../../app/sources/s3Adaptor";
+import { AppDependencies, Logger } from "../../app/domain/AppDependencies";
+import { S3 } from "aws-sdk";
 
 describe("S3 Adaptor", () => {
-  const mockLogger = {
-    log: () => {
-    },
+
+  const mockLogger: Logger = {
+    log: () => undefined,
+    error: () => undefined,
   };
 
   test("Account ID from event passed to next function", async () => {
@@ -13,17 +16,20 @@ describe("S3 Adaptor", () => {
     const bucketName = "test-bucket-name";
 
     const mockS3Client = createMockS3Client(JSON.stringify({ id: testId }));
-    const dependencies = { s3: mockS3Client, logger: mockLogger };
+    const dependencies: Pick<AppDependencies, 's3Client' | 'logger'> = {
+      s3Client: mockS3Client as any as S3,
+      logger: mockLogger,
+    };
 
     const s3DeleteEvent: S3Event = createS3Event(bucketName, objectKey);
 
-    const nextFunction = jest.fn();
+    const closeAccount = jest.fn();
 
-    const adaptor = s3Adaptor(nextFunction);
-    await adaptor(s3DeleteEvent as any, dependencies);
+    const adaptor = s3Adaptor(closeAccount);
+    await adaptor(s3DeleteEvent as any, dependencies as any);
 
     expect(mockS3Client.getObject).toHaveBeenCalledWith({ Bucket: bucketName, Key: objectKey });
-    expect(nextFunction).toBeCalledWith(testId, dependencies);
+    expect(closeAccount).toBeCalledWith(testId, dependencies);
   });
 
   const createS3Event = (bucketName: string, objectKey: string): S3Event =>
@@ -49,7 +55,7 @@ describe("S3 Adaptor", () => {
       }],
     });
 
-  const createMockS3Client = (objectBody: string) => ({
+  const createMockS3Client = (objectBody: string): jest.Mocked<Pick<S3, 'getObject'>> => ({
     getObject: jest.fn().mockReturnValue({ promise: jest.fn().mockResolvedValue({ Body: objectBody }) }),
   });
 });
