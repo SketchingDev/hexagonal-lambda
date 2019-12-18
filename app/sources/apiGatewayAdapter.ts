@@ -1,12 +1,12 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { CloseAccount } from "../domain/closeAccount";
-import { AppDependencies } from "../domain/AppDependencies";
+import { CloseAccountDependencies } from "../domain/CloseAccountDependencies";
 
 const { res } = require("@laconia/event").apigateway;
 
 const tryExtractId = (event: APIGatewayProxyEvent) => (event.pathParameters) ? event.pathParameters.id : undefined;
 
-export const apiGatewayAdapter = (next: CloseAccount) => async (event: APIGatewayProxyEvent, dependencies: AppDependencies) => {
+export const apiGatewayAdapter = (next: CloseAccount) => async (event: APIGatewayProxyEvent, dependencies: CloseAccountDependencies) => {
   const { logger } = dependencies;
 
   const id = tryExtractId(event);

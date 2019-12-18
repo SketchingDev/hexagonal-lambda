@@ -1,7 +1,7 @@
-import { AppDependencies } from "./AppDependencies";
+import { CloseAccountDependencies } from "./CloseAccountDependencies";
 
 export type CloseAccount =
-  (accountId: string, appDependencies: Pick<AppDependencies, "accountManager" | "instrumentation">) => Promise<void>;
+  (accountId: string, appDependencies: Pick<CloseAccountDependencies, "accountManager" | "instrumentation">) => Promise<void>;
 
 // This is a port for providing the ID of an account to close
 export const closeAccount: CloseAccount = async (

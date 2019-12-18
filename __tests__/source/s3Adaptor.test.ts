@@ -1,6 +1,6 @@
 import { S3Event } from "aws-lambda";
-import { s3Adaptor } from "../../app/sources/s3Adaptor";
-import { AppDependencies, Logger } from "../../app/domain/AppDependencies";
+import { s3Adaptor, S3AdaptorDependencies } from "../../app/sources/s3Adaptor";
+import { Logger } from "../../app/domain/CloseAccountDependencies";
 import { S3 } from "aws-sdk";
 
 describe("S3 Adaptor", () => {
@@ -16,7 +16,7 @@ describe("S3 Adaptor", () => {
     const bucketName = "test-bucket-name";
 
     const mockS3Client = createMockS3Client(JSON.stringify({ id: testId }));
-    const dependencies: Pick<AppDependencies, 's3Client' | 'logger'> = {
+    const dependencies: Pick<S3AdaptorDependencies, 's3Client' | 'logger'> = {
       s3Client: mockS3Client as any as S3,
       logger: mockLogger,
     };

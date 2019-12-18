@@ -1,14 +1,19 @@
 import { S3Event } from "aws-lambda";
-import { AppDependencies } from "../domain/AppDependencies";
+import { CloseAccountDependencies } from "../domain/CloseAccountDependencies";
 import { CloseAccount } from "../domain/closeAccount";
+import { S3 } from "aws-sdk";
 
 const { s3 } = require("@laconia/event");
+
+export interface S3AdaptorDependencies extends CloseAccountDependencies {
+  s3Client: S3
+}
 
 interface ObjectContent {
   id: string;
 }
 
-export const s3Adaptor = (next: CloseAccount) => async (event: S3Event, dependencies: AppDependencies) => {
+export const s3Adaptor = (next: CloseAccount) => async (event: S3Event, dependencies: S3AdaptorDependencies) => {
   const { logger, s3Client } = dependencies;
   logger.log(event);
 

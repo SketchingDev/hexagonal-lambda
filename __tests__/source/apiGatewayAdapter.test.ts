@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
-import { AppDependencies } from "../../app/domain/AppDependencies";
+import { CloseAccountDependencies } from "../../app/domain/CloseAccountDependencies";
 
 describe("API Gateway Adaptor", () => {
 
-  const dependencies: Pick<AppDependencies, 'logger'> = {
+  const dependencies: Pick<CloseAccountDependencies, 'logger'> = {
     logger: {
       log: () => undefined,
       error: () => undefined,

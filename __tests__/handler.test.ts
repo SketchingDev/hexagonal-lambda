@@ -1,10 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, S3Event, S3Handler } from "aws-lambda";
 import { AccountManagerClient } from "../app/accountClients/AccountManagerClient";
-import { closeAccountOverApiGateway, closeAccountOverS3 } from "../handler";
-import { AppDependencies } from "../app/domain/AppDependencies";
+import { closeAccountOverApiGateway } from "../handlerHttp";
+import { closeAccountOverS3 } from "../handlerS3";
+import { CloseAccountDependencies } from "../app/domain/CloseAccountDependencies";
 import { Instrumentation } from "../app/instrumentation/Instrumentation";
 import { S3 } from "aws-sdk";
 import laconia = require("@laconia/core");
+import { S3AdaptorDependencies } from "../app/sources/s3Adaptor";
 
 describe("Close Accounts", () => {
   const logger = {
@@ -31,7 +33,7 @@ describe("Close Accounts", () => {
 
   test("Account ID from HTTP passed account closer", async () => {
     const handler: APIGatewayProxyHandler = laconia(closeAccountOverApiGateway)
-      .register((): Pick<AppDependencies, "accountManager" | "logger" | "instrumentation"> => ({
+      .register((): Pick<CloseAccountDependencies, "accountManager" | "logger" | "instrumentation"> => ({
         accountManager: accountWithNoMeters,
         logger,
         instrumentation,
@@ -58,7 +60,7 @@ describe("Close Accounts", () => {
 
   test("Account ID from S3 passed account closer", async () => {
     const handler: S3Handler = laconia(closeAccountOverS3)
-      .register((): AppDependencies => ({
+      .register((): S3AdaptorDependencies => ({
         accountManager: accountWithNoMeters,
         s3Client: createMockS3Client(JSON.stringify({ id: "test-id-2" })) as any,
         logger,

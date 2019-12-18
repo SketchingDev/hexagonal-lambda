@@ -16,7 +16,7 @@ custom:
 
 functions:
   closeAccountHttp:
-    handler: handler.http
+    handler: handlerHttp.handler
     events:
       - http:
           method: DELETE
@@ -26,7 +26,7 @@ functions:
               paths:
                 id: true
   closeAccountS3:
-    handler: handler.s3
+    handler: handlerS3.handler
     events:
       - s3: final-statement-bucket
         event: s3:*
