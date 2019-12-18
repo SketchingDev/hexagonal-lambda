@@ -1,25 +1,28 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
 import { CloseAccount } from "../domain/closeAccount";
-import { CloseAccountDependencies } from "../domain/CloseAccountDependencies";
+import { Logger } from "../domain/Logger";
 
-const { res } = require("@laconia/event").apigateway;
+const response = (body: string, statusCode = 200): APIGatewayProxyResult => (
+  {
+    body,
+    statusCode,
+    headers: { "Content-Type": "text/plain" },
+  });
 
 const tryExtractId = (event: APIGatewayProxyEvent) => (event.pathParameters) ? event.pathParameters.id : undefined;
 
-export const apiGatewayAdapter = (next: CloseAccount) => async (event: APIGatewayProxyEvent, dependencies: CloseAccountDependencies) => {
-  const { logger } = dependencies;
-
+export const apiGatewayAdapter = (next: CloseAccount, { logger }: { logger: Logger }): APIGatewayProxyHandler => async (event) => {
   const id = tryExtractId(event);
   if (!id) {
-    return res("Account not defined", 500);
+    return response("Account not defined", 500);
   }
 
   try {
-    const output = await next(id, dependencies);
-    return res(output);
+    await next(id);
+    return response("Successfully closed account");
   } catch (err) {
     logger.error(err);
-    return res("Unknown error", 500);
+    return response("Unknown error", 500);
   }
 };
 

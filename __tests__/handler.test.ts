@@ -1,12 +1,10 @@
-import { APIGatewayProxyEvent, APIGatewayProxyHandler, S3Event, S3Handler } from "aws-lambda";
-import { AccountManagerClient } from "../app/accountClients/AccountManagerClient";
-import { closeAccountOverApiGateway } from "../handlerHttp";
-import { closeAccountOverS3 } from "../handlerS3";
-import { CloseAccountDependencies } from "../app/domain/CloseAccountDependencies";
+import { APIGatewayProxyEvent, S3Event } from "aws-lambda";
+import { AccountManager } from "../app/accountClients/AccountManager";
 import { Instrumentation } from "../app/instrumentation/Instrumentation";
 import { S3 } from "aws-sdk";
-import laconia = require("@laconia/core");
-import { S3AdaptorDependencies } from "../app/sources/s3Adaptor";
+import { apiGatewayAdapter } from "../app/sources/apiGatewayAdapter";
+import { closeAccount } from "../app/domain/closeAccount";
+import { s3Adaptor } from "../app/sources/s3Adaptor";
 
 describe("Close Accounts", () => {
   const logger = {
@@ -21,7 +19,7 @@ describe("Close Accounts", () => {
     removedMeters: () => Promise.resolve(),
   };
 
-  let accountWithNoMeters: AccountManagerClient;
+  let accountWithNoMeters: AccountManager;
 
   beforeEach(() => {
     accountWithNoMeters = {
@@ -32,12 +30,13 @@ describe("Close Accounts", () => {
   });
 
   test("Account ID from HTTP passed account closer", async () => {
-    const handler: APIGatewayProxyHandler = laconia(closeAccountOverApiGateway)
-      .register((): Pick<CloseAccountDependencies, "accountManager" | "logger" | "instrumentation"> => ({
-        accountManager: accountWithNoMeters,
-        logger,
-        instrumentation,
-      }));
+    const deps = {
+      accountManager: accountWithNoMeters,
+      logger,
+      instrumentation,
+    };
+
+    const handler = apiGatewayAdapter(closeAccount(deps), deps);
 
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
       path: `/account`,
@@ -45,13 +44,10 @@ describe("Close Accounts", () => {
       pathParameters: { id: "test-id-1" },
     };
 
-    const callback = jest.fn();
-    await handler(deleteEvent as any, {} as any, callback);
-
-    expect(callback).toHaveBeenCalledWith(null, {
-      "body": undefined,
+    const result = await handler(deleteEvent as any, {} as any, undefined as any);
+    expect(result).toMatchObject({
+      "body": "Successfully closed account",
       "headers": { "Content-Type": "text/plain" },
-      "isBase64Encoded": false,
       "statusCode": 200,
     });
 
@@ -59,17 +55,18 @@ describe("Close Accounts", () => {
   });
 
   test("Account ID from S3 passed account closer", async () => {
-    const handler: S3Handler = laconia(closeAccountOverS3)
-      .register((): S3AdaptorDependencies => ({
-        accountManager: accountWithNoMeters,
-        s3Client: createMockS3Client(JSON.stringify({ id: "test-id-2" })) as any,
-        logger,
-        instrumentation,
-      }));
+    const deps = {
+      accountManager: accountWithNoMeters,
+      s3: createMockS3Client(JSON.stringify({ id: "test-id-2" })) as any,
+      logger,
+      instrumentation,
+    };
+
+    const handler = s3Adaptor(closeAccount(deps), deps);
 
     const s3PutEvent = createS3Event("test-bucket-name", "test-object-key");
 
-    await handler(s3PutEvent as any, {} as any, jest.fn());
+    await handler(s3PutEvent as any, {} as any, undefined as any);
     expect(accountWithNoMeters.closeAccount).toBeCalledWith("test-id-2");
   });
 

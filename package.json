@@ -9,9 +9,6 @@
     "test": "jest __tests__"
   },
   "dependencies": {
-    "@laconia/adapter": "^1.7.0",
-    "@laconia/core": "^1.7.0",
-    "@laconia/event": "^1.7.0",
     "aws-sdk": "^2.505.0",
     "serverless": "^1.49.0"
   },

@@ -1,14 +1,11 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
-import { CloseAccountDependencies } from "../../app/domain/CloseAccountDependencies";
 
 describe("API Gateway Adaptor", () => {
 
-  const dependencies: Pick<CloseAccountDependencies, 'logger'> = {
-    logger: {
+  const logger = {
       log: () => undefined,
       error: () => undefined,
-    },
   };
 
   test("Next function invoked with Account ID from proxy event", async () => {
@@ -20,29 +17,27 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn();
 
-    const adaptor = apiGatewayAdapter(nextFunction);
-    await adaptor(deleteEvent as any, dependencies as any);
+    const handler = apiGatewayAdapter(nextFunction, { logger });
+    await handler(deleteEvent as any, {} as any, undefined as any);
 
-    expect(nextFunction).toBeCalledWith("test-account-id", dependencies);
+    expect(nextFunction).toBeCalledWith("test-account-id");
   });
 
-  test("Result of next function returned as request body", async () => {
+  test("Success message return if next function succeeds", async () => {
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
       path: `/account`,
       httpMethod: "DELETE",
       pathParameters: { id: "test-account-id" },
     };
 
-    const nextFunctionResponse = "Test response";
-    const nextFunction = jest.fn().mockResolvedValue(nextFunctionResponse);
+    const nextFunction = jest.fn().mockResolvedValue(undefined);
 
-    const adaptor = apiGatewayAdapter(nextFunction);
-    const response = await adaptor(deleteEvent as any, dependencies as any);
+    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const response = await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(response).toMatchObject({
-      body: nextFunctionResponse,
+      body: "Successfully closed account",
       headers: { "Content-Type": "text/plain" },
-      isBase64Encoded: false,
       statusCode: 200,
     });
   });
@@ -56,13 +51,12 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn().mockRejectedValue(undefined);
 
-    const adaptor = apiGatewayAdapter(nextFunction);
-    const response = await adaptor(deleteEvent as any, dependencies as any);
+    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const response = await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(response).toMatchObject({
       body: "Unknown error",
       headers: { "Content-Type": "text/plain" },
-      isBase64Encoded: false,
       statusCode: 500,
     });
   });
@@ -74,13 +68,12 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn().mockRejectedValue(undefined);
 
-    const adaptor = apiGatewayAdapter(nextFunction);
-    const response = await adaptor(deleteEvent as any, dependencies as any);
+    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const response = await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(response).toMatchObject({
       body: "Account not defined",
       headers: { "Content-Type": "text/plain" },
-      isBase64Encoded: false,
       statusCode: 500,
     });
   });

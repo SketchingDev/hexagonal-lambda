@@ -1,7 +1,7 @@
-import { AccountManagerClient } from "./AccountManagerClient";
+import { AccountManager } from "./AccountManager";
 import { FuelType, Meter, Unit } from "../domain/models/Meter";
 
-export class StubAmazingEnergyClient implements AccountManagerClient {
+export class StubAmazingEnergyClient implements AccountManager {
 
   private static readonly ELECTRICITY_METER: Readonly<Meter> = {
     id: "elec-id",

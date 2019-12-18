@@ -1,5 +1,5 @@
 import { FuelType, Meter, Unit } from "../../app/domain/models/Meter";
-import { AccountManagerClient } from "../../app/accountClients/AccountManagerClient";
+import { AccountManager } from "../../app/accountClients/AccountManager";
 import { closeAccount } from "../../app/domain/closeAccount";
 import { Instrumentation } from "../../app/instrumentation/Instrumentation";
 
@@ -9,7 +9,7 @@ describe("Close Account", () => {
   let elecMeter: Meter;
   let gasMeter: Meter;
 
-  const createAccountClient = (meters: Meter[]): AccountManagerClient => ({
+  const createAccountClient = (meters: Meter[]): AccountManager => ({
     getActiveMeters: jest.fn().mockResolvedValue(meters),
     removeMeter: jest.fn().mockResolvedValue(undefined),
     closeAccount: jest.fn().mockResolvedValue(undefined),
@@ -18,7 +18,7 @@ describe("Close Account", () => {
   beforeEach(() => {
     instrumentation = {
       closedAccount: jest.fn(),
-      removedMeters: jest.fn()
+      removedMeters: jest.fn(),
     };
 
     elecMeter = {
@@ -40,7 +40,7 @@ describe("Close Account", () => {
     const accountWithNoMeters = createAccountClient([]);
     const testAccountId = "test-account-id-1";
 
-    await closeAccount(testAccountId, { accountManager: accountWithNoMeters, instrumentation });
+    await closeAccount({ accountManager: accountWithNoMeters, instrumentation })(testAccountId);
 
     expect(accountWithNoMeters.getActiveMeters).toHaveBeenCalledWith(testAccountId);
     expect(accountWithNoMeters.removeMeter).not.toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe("Close Account", () => {
     const singleFuelAccount = createAccountClient([elecMeter]);
     const testAccountId = "test-account-id-2";
 
-    await closeAccount(testAccountId, { accountManager: singleFuelAccount, instrumentation });
+    await closeAccount({ accountManager: singleFuelAccount, instrumentation })(testAccountId);
 
     expect(singleFuelAccount.getActiveMeters).toHaveBeenCalledWith(testAccountId);
     expect(singleFuelAccount.removeMeter).toHaveBeenCalledWith(testAccountId, elecMeter);
@@ -68,7 +68,7 @@ describe("Close Account", () => {
     const dualFuelAccount = createAccountClient([elecMeter, gasMeter]);
     const testAccountId = "test-account-id-3";
 
-    await closeAccount(testAccountId, { accountManager: dualFuelAccount, instrumentation });
+    await closeAccount({ accountManager: dualFuelAccount, instrumentation })(testAccountId);
 
     expect(dualFuelAccount.getActiveMeters).toHaveBeenCalledWith(testAccountId);
     expect(dualFuelAccount.removeMeter).toHaveBeenCalledWith(testAccountId, elecMeter);
@@ -80,13 +80,13 @@ describe("Close Account", () => {
   });
 
   test("Error thrown if meter could not be removed", async () => {
-    const accountManagerClient: AccountManagerClient = {
+    const accountManagerClient: AccountManager = {
       getActiveMeters: jest.fn().mockResolvedValue([elecMeter]),
       removeMeter: jest.fn().mockRejectedValue(undefined),
       closeAccount: jest.fn().mockResolvedValue(undefined),
     };
 
-    await expect(closeAccount("test-account-id", { accountManager: accountManagerClient, instrumentation }))
+    await expect(closeAccount({ accountManager: accountManagerClient, instrumentation })("test-account-id"))
       .rejects
       .toThrowError("Failed to remove meters for account test-account-id");
   });
