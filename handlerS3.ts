@@ -9,9 +9,4 @@ const closeAccountDeps = {
   accountManager: new StubAmazingEnergyClient(),
 };
 
-const s3AdaptorDeps = {
-  logger: console,
-  s3: new S3()
-};
-
-export const handler = s3Adaptor(closeAccount(closeAccountDeps), s3AdaptorDeps);
+export const handler = s3Adaptor(closeAccount(closeAccountDeps), new S3());

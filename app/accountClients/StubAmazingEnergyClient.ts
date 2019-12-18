@@ -2,7 +2,6 @@ import { AccountManager } from "./AccountManager";
 import { FuelType, Meter, Unit } from "../domain/models/Meter";
 
 export class StubAmazingEnergyClient implements AccountManager {
-
   private static readonly ELECTRICITY_METER: Readonly<Meter> = {
     id: "elec-id",
     fuelType: FuelType.Electricity,
@@ -26,10 +25,7 @@ export class StubAmazingEnergyClient implements AccountManager {
   }
 
   public async getActiveMeters(): Promise<Array<Meter>> {
-    return Promise.resolve([
-      StubAmazingEnergyClient.ELECTRICITY_METER,
-      StubAmazingEnergyClient.GAS_METER
-    ]);
+    return Promise.resolve([StubAmazingEnergyClient.ELECTRICITY_METER, StubAmazingEnergyClient.GAS_METER]);
   }
 
   public removeMeter(): Promise<void> {

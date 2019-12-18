@@ -1,11 +1,11 @@
 export enum Unit {
   m3,
-  watts
+  watts,
 }
 
 export enum FuelType {
   Gas,
-  Electricity
+  Electricity,
 }
 
 export interface Reading {

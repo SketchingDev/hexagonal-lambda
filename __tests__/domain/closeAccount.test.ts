@@ -4,7 +4,6 @@ import { closeAccount } from "../../app/domain/closeAccount";
 import { Instrumentation } from "../../app/instrumentation/Instrumentation";
 
 describe("Close Account", () => {
-
   let instrumentation: Instrumentation;
   let elecMeter: Meter;
   let gasMeter: Meter;
@@ -31,7 +30,8 @@ describe("Close Account", () => {
       fuelType: FuelType.Gas,
       id: "test-gas-meter-id",
       lastKnownReading: {
-        unit: Unit.m3, value: 123,
+        unit: Unit.m3,
+        value: 123,
       },
     };
   });
@@ -86,8 +86,8 @@ describe("Close Account", () => {
       closeAccount: jest.fn().mockResolvedValue(undefined),
     };
 
-    await expect(closeAccount({ accountManager: accountManagerClient, instrumentation })("test-account-id"))
-      .rejects
-      .toThrowError("Failed to remove meters for account test-account-id");
+    await expect(
+      closeAccount({ accountManager: accountManagerClient, instrumentation })("test-account-id"),
+    ).rejects.toThrowError("Failed to remove meters for account test-account-id");
   });
 });

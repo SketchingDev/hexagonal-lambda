@@ -3,11 +3,13 @@ import { AccountManager } from "../accountClients/AccountManager";
 
 export type CloseAccount = (accountId: string) => Promise<void>;
 
-export const closeAccount = (
-  { accountManager, instrumentation }: { accountManager: AccountManager, instrumentation: Instrumentation },
-): CloseAccount => async (
-  accountId: string,
-): Promise<void> => {
+export const closeAccount = ({
+  accountManager,
+  instrumentation,
+}: {
+  accountManager: AccountManager;
+  instrumentation: Instrumentation;
+}): CloseAccount => async (accountId: string): Promise<void> => {
   const activeMeters = await accountManager.getActiveMeters(accountId);
 
   try {

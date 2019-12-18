@@ -3,10 +3,9 @@ import { apiGatewayAdapter } from "./app/sources/apiGatewayAdapter";
 import { StubAmazingEnergyClient } from "./app/accountClients/StubAmazingEnergyClient";
 import { StubInstrumentation } from "./app/instrumentation/StubInstrumentation";
 
-const prodDependencies = {
+const closeAccountDeps = {
   instrumentation: new StubInstrumentation(),
   accountManager: new StubAmazingEnergyClient(),
-  logger: console,
 };
 
-export const handler = apiGatewayAdapter(closeAccount(prodDependencies), prodDependencies);
+export const handler = apiGatewayAdapter(closeAccount(closeAccountDeps));

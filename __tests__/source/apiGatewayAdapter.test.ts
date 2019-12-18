@@ -2,12 +2,6 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
 
 describe("API Gateway Adaptor", () => {
-
-  const logger = {
-      log: () => undefined,
-      error: () => undefined,
-  };
-
   test("Next function invoked with Account ID from proxy event", async () => {
     const deleteEvent: Partial<APIGatewayProxyEvent> = {
       path: `/account`,
@@ -17,7 +11,7 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn();
 
-    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const handler = apiGatewayAdapter(nextFunction);
     await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(nextFunction).toBeCalledWith("test-account-id");
@@ -32,7 +26,7 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn().mockResolvedValue(undefined);
 
-    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const handler = apiGatewayAdapter(nextFunction);
     const response = await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(response).toMatchObject({
@@ -51,7 +45,7 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn().mockRejectedValue(undefined);
 
-    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const handler = apiGatewayAdapter(nextFunction);
     const response = await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(response).toMatchObject({
@@ -68,7 +62,7 @@ describe("API Gateway Adaptor", () => {
 
     const nextFunction = jest.fn().mockRejectedValue(undefined);
 
-    const handler = apiGatewayAdapter(nextFunction, { logger });
+    const handler = apiGatewayAdapter(nextFunction);
     const response = await handler(deleteEvent as any, {} as any, undefined as any);
 
     expect(response).toMatchObject({

@@ -26,5 +26,9 @@
     "ts-loader": "^4.5.0",
     "typescript": "^2.5.0",
     "webpack": "^4.39.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
