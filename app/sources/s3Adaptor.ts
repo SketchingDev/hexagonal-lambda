@@ -29,4 +29,5 @@ export const s3Adaptor = (next: CloseAccount, s3: S3): S3Handler => async event 
   }
 
   await next(closeAccountEvent.id);
+  console.log(`Closed account ${closeAccountEvent.id}`);
 };

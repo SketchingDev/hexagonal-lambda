@@ -3,10 +3,9 @@ import { s3Adaptor } from "../../app/sources/s3Adaptor";
 import { S3 } from "aws-sdk";
 
 describe("S3 Adaptor", () => {
-
   test("Account ID from event passed to next function", async () => {
     const testId = "test-id";
-    const s3Object = {key: "test-object-key", bucket: "test-bucket-name"};
+    const s3Object = { key: "test-object-key", bucket: "test-bucket-name" };
 
     const mockS3Client = createMockS3Client(JSON.stringify({ id: testId }));
     const closeAccount = jest.fn();
@@ -20,7 +19,7 @@ describe("S3 Adaptor", () => {
     expect(closeAccount).toBeCalledWith(testId);
   });
 
-  const createS3Event = ({key, bucket} : {key: string, bucket: string}): S3Event => ({
+  const createS3Event = ({ key, bucket }: { key: string; bucket: string }): S3Event => ({
     Records: [
       {
         awsRegion: "",

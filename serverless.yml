@@ -3,16 +3,20 @@ service:
 
 plugins:
   - serverless-webpack
-  - serverless-offline
 
 provider:
   name: aws
   stage: ${opt:stage, 'dev'}
-  runtime: nodejs8.10
+  runtime: nodejs10.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:GetObjectAcl
+      Resource: "arn:aws:s3:::${self:custom.finalBillBucketName}/*"
 
 custom:
-  serverless-offline:
-    port: 8080
+  finalBillBucketName: final-bill-bucket-${self:provider.stage}
 
 functions:
   closeAccountHttp:
@@ -28,12 +32,20 @@ functions:
   closeAccountS3:
     handler: handlerS3.handler
     events:
-      - s3: final-statement-bucket
-        event: s3:*
+      - s3: ${self:custom.finalBillBucketName}
+        event: s3:ObjectCreated:*
 
 resources:
   Resources:
-    FinalStatementBucket:
-      Type: AWS::S3::Bucket
+    FinalBillBucketLambdaPermission:
+      Type: "AWS::Lambda::Permission"
       Properties:
-        BucketName: final-statement-bucket
+        FunctionName:
+          "Fn::GetAtt":
+            - CloseAccountS3LambdaFunction
+            - Arn
+        Principal: "s3.amazonaws.com"
+        Action: "lambda:InvokeFunction"
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: "arn:aws:s3:::${self:custom.finalBillBucketName}"
