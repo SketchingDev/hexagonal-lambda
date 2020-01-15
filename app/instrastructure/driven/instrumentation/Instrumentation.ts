@@ -1,4 +1,4 @@
-import { Meter } from "../domain/models/Meter";
+import { Meter } from "../../../domain/models/Meter";
 
 export interface Instrumentation {
   removedMeters(meters: Meter[]): Promise<void>;

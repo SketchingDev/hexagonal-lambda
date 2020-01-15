@@ -1,5 +1,5 @@
-import { Instrumentation } from "../instrumentation/Instrumentation";
-import { AccountManager } from "../accountClients/AccountManager";
+import { Instrumentation } from "../instrastructure/driven/instrumentation/Instrumentation";
+import { AccountManager } from "../instrastructure/driven/accountManager/AccountManager";
 
 export type CloseAccount = (accountId: string) => Promise<void>;
 

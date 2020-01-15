@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
-import { CloseAccount } from "../domain/closeAccount";
+import { CloseAccount } from "../../domain/closeAccount";
 
 const response = (body: string, statusCode = 200): APIGatewayProxyResult => ({
   body,

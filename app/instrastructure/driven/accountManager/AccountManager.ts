@@ -1,4 +1,4 @@
-import { Meter } from "../domain/models/Meter";
+import { Meter } from "../../../domain/models/Meter";
 
 export interface AccountManager {
   closeAccount(accountId: string): Promise<void>;

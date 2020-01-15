@@ -1,5 +1,5 @@
 import { S3Handler } from "aws-lambda";
-import { CloseAccount } from "../domain/closeAccount";
+import { CloseAccount } from "../../domain/closeAccount";
 import { S3 } from "aws-sdk";
 
 interface ObjectContent {

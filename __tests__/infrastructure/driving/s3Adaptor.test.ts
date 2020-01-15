@@ -1,5 +1,5 @@
 import { S3Event } from "aws-lambda";
-import { s3Adaptor } from "../../app/sources/s3Adaptor";
+import { s3Adaptor } from "../../../app/instrastructure/driving/s3Adaptor";
 import { S3 } from "aws-sdk";
 
 describe("S3 Adaptor", () => {

@@ -1,12 +1,11 @@
-import { APIGatewayProxyEvent, S3Event } from "aws-lambda";
-import { AccountManager } from "../app/accountClients/AccountManager";
-import { Instrumentation } from "../app/instrumentation/Instrumentation";
+import { S3Event } from "aws-lambda";
+import { AccountManager } from "../app/instrastructure/driven/accountManager/AccountManager";
+import { Instrumentation } from "../app/instrastructure/driven/instrumentation/Instrumentation";
 import { S3 } from "aws-sdk";
-import { apiGatewayAdapter } from "../app/sources/apiGatewayAdapter";
 import { closeAccount } from "../app/domain/closeAccount";
-import { s3Adaptor } from "../app/sources/s3Adaptor";
+import { s3Adaptor } from "../app/instrastructure/driving/s3Adaptor";
 
-describe("Close Accounts", () => {
+describe("Close Accounts via S3", () => {
   const instrumentation: Instrumentation = {
     closedAccount: () => Promise.resolve(),
     removedMeters: () => Promise.resolve(),
@@ -22,38 +21,13 @@ describe("Close Accounts", () => {
     };
   });
 
-  test("Account ID from HTTP passed account closer", async () => {
-    const deps = {
-      accountManager: accountWithNoMeters,
-      instrumentation,
-    };
-
-    const handler = apiGatewayAdapter(closeAccount(deps));
-
-    const deleteEvent: Partial<APIGatewayProxyEvent> = {
-      path: `/account`,
-      httpMethod: "DELETE",
-      pathParameters: { id: "test-id-1" },
-    };
-
-    const result = await handler(deleteEvent as any, {} as any, undefined as any);
-    expect(result).toMatchObject({
-      body: "Successfully closed account",
-      headers: { "Content-Type": "text/plain" },
-      statusCode: 200,
-    });
-
-    expect(accountWithNoMeters.closeAccount).toBeCalledWith("test-id-1");
-  });
-
   test("Account ID from S3 passed account closer", async () => {
     const mocks3 = createMockS3Client(JSON.stringify({ id: "test-id-2" })) as any;
-    const closeAccountDeps = {
+
+    const handler = s3Adaptor(closeAccount({
       accountManager: accountWithNoMeters,
       instrumentation,
-    };
-
-    const handler = s3Adaptor(closeAccount(closeAccountDeps), mocks3);
+    }), mocks3);
 
     const s3PutEvent = createS3Event("test-bucket-name", "test-object-key");
 

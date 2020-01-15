@@ -1,7 +1,7 @@
 import { FuelType, Meter, Unit } from "../../app/domain/models/Meter";
-import { AccountManager } from "../../app/accountClients/AccountManager";
+import { AccountManager } from "../../app/instrastructure/driven/accountManager/AccountManager";
 import { closeAccount } from "../../app/domain/closeAccount";
-import { Instrumentation } from "../../app/instrumentation/Instrumentation";
+import { Instrumentation } from "../../app/instrastructure/driven/instrumentation/Instrumentation";
 
 describe("Close Account", () => {
   let instrumentation: Instrumentation;

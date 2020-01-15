@@ -1,7 +1,7 @@
 import { CloseAccount, closeAccount } from "./app/domain/closeAccount";
-import { StubAmazingEnergyClient } from "./app/accountClients/StubAmazingEnergyClient";
-import { s3Adaptor } from "./app/sources/s3Adaptor";
-import { StubInstrumentation } from "./app/instrumentation/StubInstrumentation";
+import { StubAmazingEnergyClient } from "./app/instrastructure/driven/accountManager/StubAmazingEnergyClient";
+import { s3Adaptor } from "./app/instrastructure/driving/s3Adaptor";
+import { StubInstrumentation } from "./app/instrastructure/driven/instrumentation/StubInstrumentation";
 import { S3 } from "aws-sdk";
 
 // Instantiate core functionality with its dependencies

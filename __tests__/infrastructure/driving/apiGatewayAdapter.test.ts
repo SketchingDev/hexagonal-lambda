@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { apiGatewayAdapter } from "../../app/sources/apiGatewayAdapter";
+import { apiGatewayAdapter } from "../../../app/instrastructure/driving/apiGatewayAdapter";
 
 describe("API Gateway Adaptor", () => {
   test("Next function invoked with Account ID from proxy event", async () => {

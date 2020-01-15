@@ -1,7 +1,7 @@
 import { CloseAccount, closeAccount } from "./app/domain/closeAccount";
-import { apiGatewayAdapter } from "./app/sources/apiGatewayAdapter";
-import { StubAmazingEnergyClient } from "./app/accountClients/StubAmazingEnergyClient";
-import { StubInstrumentation } from "./app/instrumentation/StubInstrumentation";
+import { apiGatewayAdapter } from "./app/instrastructure/driving/apiGatewayAdapter";
+import { StubAmazingEnergyClient } from "./app/instrastructure/driven/accountManager/StubAmazingEnergyClient";
+import { StubInstrumentation } from "./app/instrastructure/driven/instrumentation/StubInstrumentation";
 
 // Instantiate core functionality with its dependencies
 const accountCloser: CloseAccount = closeAccount({
