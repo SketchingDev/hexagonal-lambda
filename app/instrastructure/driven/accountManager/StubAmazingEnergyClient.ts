@@ -24,7 +24,7 @@ export class StubAmazingEnergyClient implements AccountManager {
     return Promise.resolve();
   }
 
-  public async getActiveMeters(): Promise<Array<Meter>> {
+  public async getActiveMeters(): Promise<Array<Readonly<Meter>>> {
     return Promise.resolve([StubAmazingEnergyClient.ELECTRICITY_METER, StubAmazingEnergyClient.GAS_METER]);
   }
 
