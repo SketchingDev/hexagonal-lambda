@@ -30,8 +30,8 @@ describe("Close Accounts via S3", () => {
     }), mocks3);
 
     const s3PutEvent = createS3Event("test-bucket-name", "test-object-key");
-
     await handler(s3PutEvent as any, {} as any, undefined as any);
+
     expect(accountWithNoMeters.closeAccount).toBeCalledWith("test-id-2");
   });
 
